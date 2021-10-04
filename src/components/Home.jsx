@@ -9,12 +9,10 @@ import {
 import logo from "../img/banner.jpg";
 import Cursos from './Cursos';
 import Axios from "axios";
-import { render } from '@testing-library/react';
-import Item from 'antd/lib/list/Item';
 
 const { Sider, Content } = Layout;
 
-const Home = () => {
+const Home = (props) => {
 
     const [cursos, setCursos] = useState([]);
 
@@ -27,6 +25,11 @@ const Home = () => {
         });
 
     }, [setCursos]);
+
+    const courses_details = (id_curso) => {
+        localStorage.setItem('curso_selected', id_curso);
+        props.history.push('/detalle-curso');
+    }
 
     return (
         <>
@@ -69,12 +72,11 @@ const Home = () => {
                                 {
                                     cursos.map(item => (
                                         <div className="card" key={item.id_curso}>
-                                            <img src={logo} />
+                                            <img src={logo} alt=""/>
                                             <h4>{item.nombre_curso}</h4>
                                             <p>{item.descripcion}</p>
-                                            <button className="btn btn-dark btn-sm">Acceder</button>
+                                            <button className="btn btn-dark btn-sm" onClick={() => courses_details(item.id_curso)}>Acceder</button>
                                         </div>
-
                                     ))
                                 }
                             </div>
@@ -84,7 +86,7 @@ const Home = () => {
                                 <Route path="/crearticket" />
                                 <Route path="/escritorio" />
 
-                                <Redirect to="/ingresar" />
+                                <Redirect to="/" />
                             </Switch>
                         </Content>
                     </Layout>
