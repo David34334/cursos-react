@@ -16,6 +16,10 @@ const DetalleCurso = (props) => {
         });
     }, [setCurso]);
 
+    const reciboPago = () => {
+        props.history.push('/pago-curso');
+    }
+
     return (
         <div className="container">
             <h2 className="mt-4 mb-4">DESCRIPCIÓN DEL CURSO</h2>
@@ -37,7 +41,7 @@ const DetalleCurso = (props) => {
                     <img src={logo} alt="" />
                 </div>
                 <div className="d-grid gap-2">
-                    <button type="button" className="btn btn-warning mt-2 mb-2">PAGAR</button>
+                    <button type="button" className="btn btn-warning mt-2 mb-2" onClick={() => reciboPago()}>PAGAR</button>
                 </div>
             </div>
         </div>
