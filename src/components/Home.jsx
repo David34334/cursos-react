@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import {
     UserOutlined,
     VideoCameraOutlined,
-    YoutubeOutlined,
+    YoutubeOutlined
 } from '@ant-design/icons';
-import logo from "../img/banner.jpg";
-import Cursos from './Cursos';
-import Axios from "axios";
+import Cursos from './CursosAlumno';
+import { getUserStorage } from '../helpers/getUserStorage';
+import HomeCursos from './HomeCursos';
+import Pago from './Pago';
+import DetalleCurso from './DetalleCurso';
+import Login from './Login';
+import ModuloCurso from './ModuloCurso';
 
 const { Sider, Content } = Layout;
 
-const Home = (props) => {
+const Home = () => {
 
-    const [cursos, setCursos] = useState([]);
-
-    useEffect(() => {
-        Axios.get('http://localhost:8080/cursos').then((response) => {
-            console.log(response.data);
-            setCursos(response.data);
-        }).catch((error) => {
-            console.log(error);
-        });
-
-    }, [setCursos]);
-
-    const courses_details = (id_curso) => {
-        localStorage.setItem('curso_selected', id_curso);
-        props.history.push('/detalle-curso');
-    }
+    const [user] = useState(getUserStorage());
 
     return (
         <>
@@ -40,20 +29,26 @@ const Home = (props) => {
                     >
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                             <Menu.Item key="1" icon={<VideoCameraOutlined />}>
-                                <Link to="/cursos">
+                                <Link to="/home-cursos">
                                     Cursos
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<UserOutlined />}>
-                                <Link to="/ingresar">
-                                    Perfil
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="3" icon={<YoutubeOutlined />}>
-                                <Link to="/crearticket">
-                                    Mis Cursos
-                                </Link>
-                            </Menu.Item>
+                            {
+                                (user.name && user.id) && (
+                                    <>
+                                        <Menu.Item key="2" icon={<UserOutlined />}>
+                                            <Link to="/ingresar">
+                                                Perfil
+                                            </Link>
+                                        </Menu.Item>
+                                        <Menu.Item key="3" icon={<YoutubeOutlined />}>
+                                            <Link to="/mis-cursos">
+                                                Mis Cursos
+                                            </Link>
+                                        </Menu.Item>
+                                    </>
+                                )
+                            }
                         </Menu>
                     </Sider>
                     <Layout className="site-layout">
@@ -65,28 +60,13 @@ const Home = (props) => {
                                 minHeight: 280,
                             }}
                         >
-                            <div className="banner-cursos">
-                                ¡Bienvenido/a!
-                            </div>
-                            <div className="container">
-                                {
-                                    cursos.map(item => (
-                                        <div className="card" key={item.id_curso}>
-                                            <img src={logo} alt=""/>
-                                            <h4>{item.nombre_curso}</h4>
-                                            <p>{item.descripcion}</p>
-                                            <button className="btn btn-dark btn-sm" onClick={() => courses_details(item.id_curso)}>Acceder</button>
-                                        </div>
-                                    ))
-                                }
-                            </div>
                             <Switch>
-                                <Route path="/cursos" component={Cursos} />
-                                <Route path="/cola" />
-                                <Route path="/crearticket" />
-                                <Route path="/escritorio" />
-
-                                <Redirect to="/" />
+                                <Route path="/registro" component={Login} />
+                                <Route path="/detalle-curso" component={DetalleCurso} />
+                                <Route path="/pago-curso" component={Pago} />
+                                <Route path="/mis-cursos" component={Cursos} />
+                                <Route path="/home-cursos" component={HomeCursos} />
+                                <Route path="/modulo-curso" component={ModuloCurso} />
                             </Switch>
                         </Content>
                     </Layout>

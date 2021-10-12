@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
+import { getUserStorage } from "../helpers/getUserStorage";
 
-const Login = (props) => {
+const Login = () => {
 
     //VARIABLE GLOBAL - CONTROL DE SESION
-    const [isLogIn, setIsLogIn] = useState(false);
+    const history = useHistory();
+    const [user] = useState(getUserStorage()); 
     const [messageLogIn, setMessageLogIn] = useState(null);
 
     //CONTROLAR REGISTRO O INICIO DE SESION
@@ -43,12 +46,16 @@ const Login = (props) => {
             console.log(response)
             if (response.data.message) {
                 setMessageLogIn(response.data.message);
-            } else{
-                setIsLogIn(!isLogIn);
-                props.history.push('/home');
+            } else {
+                localStorage.setItem('AuthUser', response.data[0].id);
+                localStorage.setItem('Username', response.data[0].nombre + " " + response.data[0].apellido);
+                history.push('/home');
             }
-            console.log(isLogIn);
         });
+    }
+
+    if (user.id && user.name) {
+        return <Redirect to="/home" />
     }
 
     const sendForm = (ev) => {
@@ -78,7 +85,6 @@ const Login = (props) => {
         }
     };
 
-    //                            <input type="password" class="input" name="contrasena-repeat" placeholder="Repite tu contraseña"/>
     return (
         <>
             <div className="mt-5 form-access">
@@ -118,7 +124,7 @@ const Login = (props) => {
                                 )
 
                             }
-                            <div class="d-grid gap-2">
+                            <div className="d-grid gap-2">
                                 <button className="btn btn-dark btn-block mt-1" type="submit">{esRegistro ? 'Registrarse' : 'Iniciar Sesión'}</button>
                                 <button className="btn btn-warning btn-sm btn-block " type="button" onClick={() => setEsRegistro(!esRegistro)}>
                                     {esRegistro ? '¿Ya tienes cuenta?' : '¿No tienes una cuenta?'}
@@ -128,9 +134,6 @@ const Login = (props) => {
                         </form>
                     </div>
                 </div>
-            </div>
-            <div className="img-banner">
-
             </div>
         </>
     )

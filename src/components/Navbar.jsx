@@ -1,6 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router';
+import { getUserStorage } from "../helpers/getUserStorage";
+import {
+    LoginOutlined
+} from '@ant-design/icons';
 
 const Navbar = () => {
+
+    const [user] = useState(getUserStorage());
+    const history = useHistory();
+
+    const LogOutUser = () => {
+        localStorage.removeItem('AuthUser');
+        localStorage.removeItem('Username');
+        history.push('/registro');
+    }
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -15,6 +30,11 @@ const Navbar = () => {
                             <a className="nav-link" href="/home">About</a>
                         </div>
                     </div>
+                    <button className="btn btn-outline-light mx-2" type="submit" onClick={LogOutUser}>
+                    {
+                        user.name && user.id ? <LoginOutlined /> : 'Registrarme'
+                    }
+                    </button>
                 </div>
             </nav>
         </>

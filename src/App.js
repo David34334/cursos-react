@@ -1,10 +1,9 @@
 import React from 'react'
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import DetalleCurso from './components/DetalleCurso';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
-import Pago from './components/Pago';
+
 
 function App() {
   return (
@@ -13,9 +12,10 @@ function App() {
           <Navbar />
           <Switch>
             <Route path="/home" component={Home}/>
+            <Route path="/registro" component={Login}/>
             <Route exact path="/" component={Login}/>
-            <Route path="/detalle-curso" component={DetalleCurso}/>
-            <Route path="/pago-curso" component={Pago}/>
+
+            <Redirect to="/registro" />
           </Switch>
         </Router>
     </>

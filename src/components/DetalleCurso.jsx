@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import logo from "../img/banner.jpg";
 import Axios from "axios";
+import { getUserStorage } from '../helpers/getUserStorage';
 
-const DetalleCurso = (props) => {
+const DetalleCurso = () => {
 
+    const [user] = useState(getUserStorage()); 
     const [curso, setCurso] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         const curso_st = localStorage.getItem('curso_selected');
@@ -17,7 +21,11 @@ const DetalleCurso = (props) => {
     }, [setCurso]);
 
     const reciboPago = () => {
-        props.history.push('/pago-curso');
+        history.push('/pago-curso');
+    }
+
+    if (!user.id || !user.name) {
+        return <Redirect to="/registro" />
     }
 
     return (
