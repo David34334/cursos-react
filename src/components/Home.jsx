@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import {
-    UserOutlined,
     VideoCameraOutlined,
-    YoutubeOutlined
+    YoutubeOutlined,
+    VerticalAlignBottomOutlined
 } from '@ant-design/icons';
 import Cursos from './CursosAlumno';
 import { getUserStorage } from '../helpers/getUserStorage';
@@ -13,6 +13,7 @@ import Pago from './Pago';
 import DetalleCurso from './DetalleCurso';
 import Login from './Login';
 import ModuloCurso from './ModuloCurso';
+import Recibos from './Recibos';
 
 const { Sider, Content } = Layout;
 
@@ -36,14 +37,14 @@ const Home = () => {
                             {
                                 (user.name && user.id) && (
                                     <>
-                                        <Menu.Item key="2" icon={<UserOutlined />}>
-                                            <Link to="/ingresar">
-                                                Perfil
-                                            </Link>
-                                        </Menu.Item>
                                         <Menu.Item key="3" icon={<YoutubeOutlined />}>
                                             <Link to="/mis-cursos">
                                                 Mis Cursos
+                                            </Link>
+                                        </Menu.Item>
+                                        <Menu.Item key="4" icon={<VerticalAlignBottomOutlined />}>
+                                            <Link to="/recibos">
+                                                Mis recibos
                                             </Link>
                                         </Menu.Item>
                                     </>
@@ -67,6 +68,7 @@ const Home = () => {
                                 <Route path="/mis-cursos" component={Cursos} />
                                 <Route path="/home-cursos" component={HomeCursos} />
                                 <Route path="/modulo-curso" component={ModuloCurso} />
+                                <Route path="/recibos" component={Recibos} />
                             </Switch>
                         </Content>
                     </Layout>
